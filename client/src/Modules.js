@@ -1,10 +1,10 @@
 import React from "react";
-import {MainView} from "./components";
+import {MainView, ModuleSearch} from "./components";
 
 const Modules = () => {
     return (
         <div>
-            <MainView />
+            <MainView sideView = {<ModuleSearch />}/>
         </div>
     )
 }
