@@ -1,10 +1,10 @@
 import React from "react";
-import {MainView} from "./components";
+import {MainView, Mapper} from "./components";
 
 const mapTool = () => {
     return (
         <div>
-            <MainView />
+            <MainView sideView = {<Mapper />}/>
         </div>
     )
 }
