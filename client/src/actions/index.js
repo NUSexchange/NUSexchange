@@ -61,4 +61,28 @@ export const changeUniversities = (universities) => {
       type : "CHANGE_UNIVERSITIES",
       payload: universities
     }
+}
+
+//ACTION CHANGE NAME
+export const changeName = (name) => {
+  return {
+    type : "CHANGE_NAME",
+    payload: name
   }
+}
+
+//ACTION CHANGE PRIMARY MAJOR
+export const changePrimaryMajor = (primaryMajor) => {
+  return {
+    type : "CHANGE_PRIMARY_MAJOR",
+    payload: primaryMajor
+  }
+}
+
+//ACTION CHANGE STUDENT ID
+export const changeStudentID = (studentId) => {
+  return {
+    type : "CHANGE_STUDENT_ID",
+    payload: studentId
+  }
+}

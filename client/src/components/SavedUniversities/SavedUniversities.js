@@ -8,10 +8,19 @@ import Button from "react-bootstrap/Button";
 import {useSelector} from "react-redux";
 import {FaSadCry} from "react-icons/fa";
 import {Link} from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import {useDispatch} from "react-redux";
+import {changeName} from "../../actions";
+import {changePrimaryMajor} from "../../actions";
+import {changeStudentID} from "../../actions";
 
 const SavedUnis = () => {
 
     const currUnis = useSelector(store => store.myExchange.universities);
+    const savedDetails = useSelector(store => store.pdfDetails);
+    const dispatch = useDispatch();
 
 
     const hasSavedUnis = <div className = {styles.grid}>
@@ -32,6 +41,29 @@ const SavedUnis = () => {
 
     return (
         <Container fluid style = {{marginTop: "30px"}}>
+            <Form>
+                <Row>
+                    <Col sm = {12} lg = {4}>
+                        <Form.Group as={Col} controlId="formName" onChange = {(e) => dispatch(changeName(e.target.value))}>
+                            <Form.Label>Full Name</Form.Label>
+                            <Form.Control type="text" defaultValue = {savedDetails.name} placeholder = "Name" />
+                        </Form.Group>
+                    </Col>
+                    <Col sm = {12} lg = {4}>
+                        <Form.Group as={Col} controlId="formPrimaryMajor" onChange = {(e) => dispatch(changePrimaryMajor(e.target.value))}>
+                            <Form.Label>Primary Major</Form.Label>
+                            <Form.Control type="text" defaultValue = {savedDetails.primaryMajor} placeholder = "Primary Major" />
+                        </Form.Group>
+                    </Col>
+                    <Col sm = {12} lg = {4}>
+                        <Form.Group as={Col} controlId="formStudentID"onChange = {(e) => dispatch(changeStudentID(e.target.value))}>
+                            <Form.Label>Student Number</Form.Label>
+                            <Form.Control type="text" defaultValue = {savedDetails.studentId} placeholder = "Student ID"/>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            </Form>
+            <hr />
                 <CardDeck>
                     {currUnis.length === 0 ? noSavedUnis : hasSavedUnis}
                 </CardDeck>
