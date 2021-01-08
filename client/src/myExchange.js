@@ -1,10 +1,10 @@
 import React from "react";
-import {MainView} from "./components";
+import {MainView, SavedUniversities} from "./components";
 
 const myExchange = () => {
     return (
         <div>
-            <MainView />
+            <MainView sideView = {<SavedUniversities />}/>
         </div>
     )
 }

@@ -6,7 +6,7 @@ import secondPicture from './images/2.png';
 import thirdPicture from './images/3.png';
 
 const SlideShow =   <Carousel>
-                        <Carousel.Item interval={2000}>
+                        <Carousel.Item interval={1500}>
                             <img
                             className="d-block w-100"
                             src = {firstPicture}
