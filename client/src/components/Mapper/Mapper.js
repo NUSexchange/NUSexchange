@@ -13,22 +13,29 @@ import {BiError} from "react-icons/bi";
 import Jumbotron from "react-bootstrap/Jumbotron"
 import axios from 'axios';
 import styles from "./Mapper.module.css";
+import logo from "../../images/NUSmodsLogo.png";
+import jones from "../../images/jones.png";
+import mingSoon from "../../images/MingSoon.png";
 
 const noResult = <h1>Select an NUS module to compare with!<BiHappyBeaming /></h1>;
 
 const redBand = <div className = {styles.redBand}>
-                    <h1>Its reddddd <FaSadCry /></h1>
+                    <h1>Oppsie! We've calculated that there's a low chance of mapping this module <FaSadCry /></h1>
                 </div>;
 
 const yellowBand = <div className = {styles.yellowBand}>
-                        <h1>Yellow yellow dirty fellow <ImNeutral2/></h1>
+                        <h1>Hmm... It's somewhat similar so you might have a chance <ImNeutral2/></h1>
                     </div>;
 
 const greenBand = <div className = {styles.greenBand}>
-                        <h1>Yay green <HiEmojiHappy /></h1>
+                        <h1>Oh wow! It's pretty similar! You've got a pretty good chance <HiEmojiHappy /></h1>
                     </div>; 
 
 const errorResult = <h1>Insert error message here<BiError /></h1>;
+
+const Loading = <div>
+                    <img className= {styles.rotate} src = {mingSoon} alt="logo"/>
+                </div>
 
 
 const Mapper = () => {
@@ -57,7 +64,8 @@ const Mapper = () => {
     }
 
     const calculateProbability = (nusModule, otherModule) => {
-
+        setCurrView(Loading);
+        setTimeout(3000);
         axios.post("http://localhost:5000/getnlp/fetch", {"nusModule": nusModule, "otherModule" : otherModule})
             .then(function (response) {
                 let roundedData = Math.round(response.data[0] * 100) / 100;

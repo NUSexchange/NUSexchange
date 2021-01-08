@@ -24,3 +24,17 @@
     height: 100%;
     width: 100%;
 }
+
+.rotate {
+    animation: rotation 3s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+
