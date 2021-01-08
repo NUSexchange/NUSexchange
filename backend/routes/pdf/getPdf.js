@@ -7,12 +7,12 @@ const {PythonShell} = require('python-shell');
 router.post("/create-pdf", (req, res) => { 
     let options = { 
         mode: 'text', 
-        pythonPath: '/usr/local/bin/python3.8', 
+        pythonPath: 'C:/Python39/python.exe', 
         pythonOptions: ['-u'], // get print results in real-time 
         args: [JSON.stringify(req.body)]
     }; 
     
-    PythonShell.run("/Users/carelchay/PycharmProjects/NUSexchange-beta--master/backend/routes/pdf/getPdf.py", options, function (err, results) {
+    PythonShell.run("./routes/pdf/getPdf.py", options, function (err, results) {
       if (err) throw err;
     });
 

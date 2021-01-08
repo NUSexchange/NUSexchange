@@ -17,7 +17,7 @@ router.post("/fetch", (req, res) => {
 
         let options = { 
           mode: 'text', 
-          pythonPath: '/usr/local/bin/python3.8', 
+          pythonPath: 'C:/Python39/python.exe', 
           pythonOptions: ['-u'], // get print results in real-time 
           args: [response.data.description, req.body.otherModule]
         }; 
@@ -25,7 +25,7 @@ router.post("/fetch", (req, res) => {
         console.log("arg 1: " + response.data.description);
         console.log("arg 2: " + req.body.otherModule)
 
-        PythonShell.run("/Users/carelchay/PycharmProjects/NUSexchange-beta--master/backend/routes/nlp/main.py", options, function (err, results) {
+        PythonShell.run("./routes/nlp/main.py", options, function (err, results) {
           if (err) throw err;
           res.send(results);
         });
