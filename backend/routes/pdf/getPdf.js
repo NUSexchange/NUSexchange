@@ -21,7 +21,6 @@ router.post("/create-pdf", (req, res) => {
 
 router.get("/get-pdf", (req, res) => {
   file = req.query.fileName;
-  console.log(file);
   fileLocation =  "./routes/pdf/" + file;
   res.download(fileLocation, (err) => {
                 if (err) console.log(err );
