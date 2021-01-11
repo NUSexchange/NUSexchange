@@ -132,7 +132,7 @@ output.addPage(page)
 
 # finally, write "output" to a real file
 # dest = "/Users/kormi/OneDrive/Desktop/NUS/kms-NUSexchange/client/src/components/pdfgenerator/" + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
-dest = "C:/Users/kishe/Desktop/NUSexchange/backend/routes/pdf/original-proposed-module.pdf" + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
+dest = "C:/Users/kishe/Desktop/NUSexchange/backend/routes/pdf/" + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
 
 outputStream = open(dest, "wb")
 output.write(outputStream)
