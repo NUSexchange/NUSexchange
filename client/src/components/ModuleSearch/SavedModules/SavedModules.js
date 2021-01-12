@@ -18,10 +18,10 @@ const SavedModules = () => {
 
     return (
         <Container fluid>
-            <Row style = {{marginBottom : "20px"}}>
+            <Row>
                 <SearchBar />
             </Row>
-            <Row>
+            <Row style = {{marginTop : "20px"}}>
                 <div className = {styles.grid}>
                         {currMods.map((mods, index) => <Card body>
                                                             <div className = {styles.modBlock}>

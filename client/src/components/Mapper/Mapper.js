@@ -13,8 +13,6 @@ import {BiError} from "react-icons/bi";
 import Jumbotron from "react-bootstrap/Jumbotron"
 import axios from 'axios';
 import styles from "./Mapper.module.css";
-import logo from "../../images/NUSmodsLogo.png";
-import jones from "../../images/jones.png";
 import mingSoon from "../../images/MingSoon.png";
 
 const noResult = <h1>Select an NUS module to compare with!<BiHappyBeaming /></h1>;
@@ -95,13 +93,13 @@ const Mapper = () => {
                         onChange = {(e) => setOtherModuleText(e.target.value)}
                         />
                         <hr></hr>
-                        <div style = {{display: "flex", justifyContent: "center"}}>
+                        <div style = {{display: "flex", justifyContent: "center", marginBottom : "20px"}}>
                             <Button onClick = {() => calculateProbability(NUSmodule, OtherModuleText)} variant="dark">Calculate Probability</Button>
                         </div>
                     </form>
                 </Col>
                 <Col lg = {7}>
-                    <Jumbotron style = {{height : "100%", display: "flex", alignItems: 'center', justifyContent: 'center'}}>
+                    <Jumbotron style = {{height : "100%", display: "flex", alignItems: 'center', justifyContent: 'center', marginBottom : "20px"}}>
                             {currView}
                     </Jumbotron>
                 </Col>

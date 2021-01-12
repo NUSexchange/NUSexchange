@@ -1,15 +1,21 @@
-.grid {
+/*When screen size is small, we want to display one module per row */
+@media (max-width : 800px) {
+  .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    /* This is better for small screens, once min() is better supported */
-    /* grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); */
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
     grid-gap: 1rem;
-    /* This is the standardized property now, but has slightly less support */
-    /* gap: 1rem */
     width: 100%;
   }
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+    grid-gap: 1rem;
+    width: 100%;
+}
 
   .modBlock {
     display: flex;
     justify-content: space-between;
+
   }
