@@ -1,21 +1,35 @@
 
-const initialState = {
-    universities : [],
-    savedHashes : [],
-    hashSize : 0
-  };
+  let initialState; 
+  let itemInLocalStorage = JSON.parse(localStorage.getItem("savedUniversities"));
   
+  if (itemInLocalStorage != null) {
+    initialState = itemInLocalStorage;
+
+  } else {
+    initialState = {
+      universities : [],
+      savedHashes : [],
+      hashSize : 0
+    };
+  } 
+    
   const addUniversity = (state, uni) => {
-    if (state.savedHashes.includes(uni.key)) return {universities: state.universities, savedHashes: state.savedHashes, hashSize: state.savedHashes.length};
+    if (state.savedHashes.includes(uni.key)) return {
+      universities: state.universities, savedHashes: state.savedHashes, hashSize: state.savedHashes.length
+    };
     const newUniversities = [...state.universities, uni];
     const newSavedHashes = [...state.savedHashes, uni.key];
-    return {universities: newUniversities, savedHashes: newSavedHashes, hashSize: newSavedHashes.length};
+    const newObject = {universities: newUniversities, savedHashes: newSavedHashes, hashSize: newSavedHashes.length};
+    localStorage.setItem("savedUniversities", JSON.stringify(newObject));
+    return newObject;
   }
   
   const removeUniversity = (state, uni) => {
     const newUniversities = [...state.universities.filter(mod => mod.key !== uni)];
     const newSavedHashes = [...state.savedHashes.filter(mod => mod !== uni)];
-    return {universities: newUniversities, savedHashes: newSavedHashes, hashSize: newSavedHashes.length};
+    const newObject = {universities: newUniversities, savedHashes: newSavedHashes, hashSize: newSavedHashes.length};
+    localStorage.setItem("savedUniversities", JSON.stringify(newObject));
+    return newObject;
   }
   
   const myExchange = (state = initialState, action) => {
