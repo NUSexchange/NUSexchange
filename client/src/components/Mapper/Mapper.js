@@ -31,7 +31,7 @@ const greenBand = <div className = {styles.greenBand}>
                         <h1>Oh wow! It's pretty similar! You've got a pretty good chance <HiEmojiHappy /></h1>
                     </div>; 
 
-const errorResult = <h1>Insert error message here<BiError /></h1>;
+const errorResult = <h1>Oh no! Looks like something went wrong! <BiError /></h1>;
 
 const Loading = <div>
                     <img className= {styles.rotate} src = {mingSoon} alt="logo"/>
