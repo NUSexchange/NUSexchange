@@ -16,7 +16,7 @@ import {changeName} from "../../actions";
 import {changePrimaryMajor} from "../../actions";
 import {changeStudentID} from "../../actions";
 
-const SavedUnis = () => {
+const SavedUniversities = () => {
 
     const currUnis = useSelector(store => store.myExchange.universities);
     const savedDetails = useSelector(store => store.pdfDetails);
@@ -24,7 +24,7 @@ const SavedUnis = () => {
 
 
     const hasSavedUnis = <div className = {styles.grid}>
-                            {currUnis.map(uni => <UniversityCard university = {uni.university} location = {uni.location} nusModuleInfo = {uni.nusModuleInfo} id = {uni.key}/>)}
+                            {currUnis.map((uni, index) => <UniversityCard key = {index} university = {uni.university} location = {uni.location} nusModuleInfo = {uni.nusModuleInfo} id = {uni.key}/>)}
                         </div>;
 
     const noSavedUnis = <Jumbotron style = {{width : "100%"}}>
@@ -71,4 +71,4 @@ const SavedUnis = () => {
     )
 }
 
-export default SavedUnis;
+export default SavedUniversities;

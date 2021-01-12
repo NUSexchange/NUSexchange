@@ -18,12 +18,12 @@ const SavedModules = () => {
 
     return (
         <Container fluid>
-            <Row style = {{marginBottom : "20px"}}>
+            <Row>
                 <SearchBar />
             </Row>
-            <Row>
+            <Row style = {{marginTop : "20px"}}>
                 <div className = {styles.grid}>
-                        {currMods.map((mods, index) => <Card body>
+                        {currMods.map((mods, index) => <Card body key = {index}>
                                                             <div className = {styles.modBlock}>
                                                                 {mods.title + " " + mods["NUS Module 1 Title"]}
                                                                 <Button variant = "light" onClick = {() => dispatch(removeModule(mods))}><MdDelete/></Button> 

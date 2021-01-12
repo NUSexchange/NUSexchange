@@ -60,13 +60,13 @@ export default function StickyHeadTable() {
     <Popover id="popover-basic">
       <Popover.Title as="h3">Mappable Modules</Popover.Title>
       <Popover.Content>
-          {nusModules.map(nusModule => <li>{nusModule.nusModuleCode}</li>)}
+          {nusModules.map((nusModule, index)=> <li key = {index}>{nusModule.nusModuleCode}</li>)}
       </Popover.Content>
     </Popover>
   );
   
   const button = (modules) => (
-      <OverlayTrigger trigger="hover" placement="right" overlay= {popover(modules)}>
+      <OverlayTrigger trigger= {["hover", "focus"]} placement="right" overlay= {popover(modules)}>
       <Button variant="light">{modules.length}</Button>
       </OverlayTrigger>
   );
@@ -103,9 +103,9 @@ export default function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (

@@ -66,14 +66,15 @@ export default function SearchBar() {
   const moduleSearch = useSelector(store => store.savedModules.selectedModules).map(module => module.title);
   const countryFilter = useSelector(store => store.searchModuleOptions.country)
 
-  const objectToSendOver = {
-    information : { 
-      "modules": moduleSearch, 
-      "countryFilter": countryFilter
-    }
-  }
-
   useEffect(() => {
+
+    const objectToSendOver = {
+      information : { 
+        "modules": moduleSearch, 
+        "countryFilter": countryFilter
+      }
+    }
+
     axios.post("http://localhost:5000/getresults/fetch", objectToSendOver)
     .then(function (response) {
       let newList = processResponse(response.data);
@@ -81,7 +82,7 @@ export default function SearchBar() {
     }).catch(function(error) {
       console.log(error);
     })
-  }, [moduleSearch, countryFilter]);
+  }, [moduleSearch, countryFilter, dispatch]);
 
   return (
     <Autocomplete

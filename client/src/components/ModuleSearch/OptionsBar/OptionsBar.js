@@ -9,7 +9,7 @@ const OptionsBar = () => {
     const dispatch = useDispatch();
 
     return (
-        <Container fluid>
+        <Container fluid style = {{marginTop : "20px"}}>
             <div className = {styles.header}>
                 <h2>Search filters</h2>
             </div>
