@@ -1,5 +1,15 @@
 # NUSexchange
 
+## Devpost
+[Checkout our Devpost submission!](https://devpost.com/software/exchangenus)
+
+## Hosting
+We are currently hosting the application at http://nusexchange.herokuapp.com/
+(Make sure to use the http:// and not the https:// version)
+
+This is only a temporary site and we will take the application down soon to continue
+work on it.
+
 ## Getting Started	
 
 #### 1. Fork and git clone this repo
