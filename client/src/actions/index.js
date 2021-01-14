@@ -86,3 +86,19 @@ export const changeStudentID = (studentId) => {
     payload: studentId
   }
 }
+
+//ACTION UPDATE UNIVERSITY RESULTS
+export const updateUniversityResults = (universities) => {
+  return {
+    type : "UPDATE_UNIVERSITY_RESULTS",
+    payload: universities
+  }
+}
+
+//ACTION UPDATE UNIVERSITY RESULTS
+export const filterUniversityResults = (filterKeyword) => {
+  return {
+    type : "FILTER_UNIVERSITY_RESULTS",
+    payload: filterKeyword
+  }
+}
