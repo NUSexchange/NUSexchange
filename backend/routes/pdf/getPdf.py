@@ -1,140 +1,94 @@
-from PyPDF2 import PdfFileWriter, PdfFileReader
-import io, json, sys
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase.pdfmetrics import getAscent, stringWidth
+import pdfrw
+import os, json, sys
 
-# ---------------- INITIALISATION ----------------
-
-# setting up of pdf canvas
-packet = io.BytesIO()
-infoToAddPdf = canvas.Canvas(packet, pagesize=A4)
-
-# position + font size
-PU_UNI_NAME_X, PU_UNI_NAME_Y = 145, 435
-
-NUS_MODULE_CODE_X, NUS_MODULE_CODE_Y = 430, 350
-NUS_MODULE_NAME_X, NUS_MODULE_NAME_Y = 500, 350
-NUS_CREDIT_X, NUS_CREDIT_Y = 735, 350
-
-PU_MODULE_CODE_X, PU_MODULE_CODE_Y = 45, 350
-PU_MODULE_NAME_X, PU_MODULE_NAME_Y = 110, 350
-PU_CREDIT_X, PU_CREDIT_Y = 335, 350
-
-yCoordinateAdjustment = 35
-
-TEXT_WRAP_LIMIT = 200
-FONT_SIZE = 10
-
+ANNOT_KEY = '/Annots'
+ANNOT_FIELD_KEY = '/T'
+ANNOT_VAL_KEY = '/V'
+ANNOT_RECT_KEY = '/Rect'
+SUBTYPE_KEY = '/Subtype'
+WIDGET_SUBTYPE_KEY = '/Widget'
 
 # ----------------- JSON DATA  -----------------
+def updateNusCodeIntoPdf(input, i):
+    global form_data
+    formEntry = 'Module Code' + str(i) + '_2'
+    form_data[formEntry] = input
 
-def updateParterUniName(partnerUniName):
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    infoToAddPdf.drawString(PU_UNI_NAME_X, PU_UNI_NAME_Y, partnerUniName)
+def updateNusCreditIntoPdf(input, i):
+    global form_data
+    formEntry = 'NUS MC' + str(i)
+    form_data[formEntry] = input
 
-def updateNusCodeInfoPdf(input):
-    global NUS_MODULE_CODE_X, NUS_MODULE_CODE_Y
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    infoToAddPdf.drawString(NUS_MODULE_CODE_X, NUS_MODULE_CODE_Y, input)
-    NUS_MODULE_CODE_Y -= yCoordinateAdjustment
+def updateNusNameIntoPdf(input, i):
+    global form_data
+    formEntry = 'Title of Module' + str(i) + '_2'
+    form_data[formEntry] = input
 
-def updateNusCreditIntoPdf(input):
-    global NUS_CREDIT_X, NUS_CREDIT_Y
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    infoToAddPdf.drawString(NUS_CREDIT_X, NUS_CREDIT_Y, input)
-    NUS_CREDIT_Y -= yCoordinateAdjustment
+def updatePUCodeIntoPdf(input, i):
+    global form_data
+    formEntry = 'Module Code' + str(i)
+    form_data[formEntry] = input
 
-def updateNusNameInfoPdf(input):
-    global NUS_MODULE_NAME_Y, NUS_MODULE_NAME_X
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    width = stringWidth(input, "Helvetica", FONT_SIZE)
+def updatePUNameIntoPdf(input):
+    global form_data
+    formEntry = 'Title of Module' + str(i)
+    form_data[formEntry] = input
 
-    if width > TEXT_WRAP_LIMIT:
-        NUS_MODULE_NAME_Y += 5
-
-    infoToAddPdf.drawString(NUS_MODULE_NAME_X, NUS_MODULE_NAME_Y, input)
-
-    NUS_MODULE_NAME_Y -= yCoordinateAdjustment
-
-def updatePUCodeInfoPdf(input):
-    global PU_MODULE_CODE_Y, PU_MODULE_CODE_X
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    infoToAddPdf.drawString(PU_MODULE_CODE_X, PU_MODULE_CODE_Y, input)
-    PU_MODULE_CODE_Y -= yCoordinateAdjustment
-
-def updatePUNameInfoPdf(input):
-    global PU_MODULE_NAME_Y, PU_MODULE_NAME_X
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    width = stringWidth(input, "Helvetica", FONT_SIZE)
-
-    if width > TEXT_WRAP_LIMIT:
-        PU_MODULE_NAME_Y += 5
-        infoToAddPdf.drawString(PU_MODULE_NAME_X, PU_MODULE_NAME_Y, input)
-    else:
-        infoToAddPdf.drawString(PU_MODULE_NAME_X, PU_MODULE_NAME_Y, input)
-
-    PU_MODULE_NAME_Y -= yCoordinateAdjustment
-
-def updatePUCreditIntoPdf(input):
-    global PU_CREDIT_X, PU_CREDIT_Y
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    infoToAddPdf.drawString(PU_CREDIT_X, PU_CREDIT_Y, input)
-    PU_CREDIT_Y -= yCoordinateAdjustment
+def updatePUCreditIntoPdf(input, i):
+    global form_data
+    formEntry = 'Credits' + str(i)
+    form_data[formEntry] = input
 
 def parsePartnerModule(partnerModules):
     firstPartnerModule = partnerModules[0]
-    updatePUCodeInfoPdf(firstPartnerModule['partnerModuleCode'])
+    updatePUCodeIntoPdf(firstPartnerModule['partnerModuleCode'])
     updatePUCreditIntoPdf(firstPartnerModule['partnerModuleCredit'])
-    updatePUNameInfoPdf(firstPartnerModule['partnerModuleTitle'])
+    updatePUNameIntoPdf(firstPartnerModule['partnerModuleTitle'])
 
 def parseMappableModules(mappableModules):
-    for mappableModule in mappableModules:
-        updateNusCodeInfoPdf(mappableModule['nusModuleCode'])
-        updateNusNameInfoPdf(mappableModule['nusModuleTitle'])
-        updateNusCreditIntoPdf(mappableModule['nusModuleCredit'])
-        parsePartnerModule(mappableModule['partnerModules'])
+    for i, mappableModule in enumerate(mappableModules):
+        updateNusCodeIntoPdf(mappableModule['nusModuleCode'], i)
+        updateNusNameIntoPdf(mappableModule['nusModuleTitle'], i)
+        updateNusCreditIntoPdf(mappableModule['nusModuleCredit'], i)
+        parsePartnerModule(mappableModule['partnerModules'], i)
 
-def updatePersonalInfo(name, matricNumber, major):
-    infoToAddPdf.setFont("Helvetica", FONT_SIZE)
-    infoToAddPdf.drawString(145, 495, name) # name position
-    infoToAddPdf.drawString(145, 465, matricNumber) # matric number position
-    infoToAddPdf.drawString(500, 495, major) # major position
+def updatePersonalInfo(name, matricNumber, major, partnerUni):
+    global form_data
+    form_data['Student Name'] = name
+    form_data['Student No'] = matricNumber
+    form_data['Primary Major'] = major
+    form_data['Partner University'] = partnerUni
 
-def generateSinglePartnerUniPdf(applicantInfo):
+def populateFormData(applicantInfo):
     updatePersonalInfo(applicantInfo["name"], applicantInfo["primaryMajor"]
-    , applicantInfo["studentId"])
-    infoOfPU = applicantInfo["uni"]
-    updateParterUniName(infoOfPU['university'])
-    parseMappableModules(infoOfPU['nusModuleInfo'])
+    , applicantInfo["studentId"], applicantInfo["uni"]['university'])
+    parseMappableModules(applicantInfo["uni"]['nusModuleInfo'])
 
-# ------------ START ---------------------------
+def fill_pdf(input_pdf_path, output_pdf_path, data_dict):
+    template_pdf = pdfrw.PdfReader(input_pdf_path)
+    for page in template_pdf.pages:
+        annotations = page[ANNOT_KEY]
+        for annotation in annotations:
+            if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
+                if annotation[ANNOT_FIELD_KEY]:
+                    key = annotation[ANNOT_FIELD_KEY][1:-1]
+                    if key in data_dict.keys():
+                        annotation.update(pdfrw.PdfDict(V='{}'.format(data_dict[key])))
+                        annotation.update(pdfrw.PdfDict(AP=''))
+    template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+    pdfrw.PdfWriter().write(output_pdf_path, template_pdf)
 
-applicantInfo = json.loads(sys.argv[1])
+if __name__ == '__main__':
+    # Get pdf form fields
+    # template_pdf = pdfrw.PdfReader(input_pdf_path)
 
-# creates and draws all the PU information on a empty Pdf
-generateSinglePartnerUniPdf(applicantInfo)
-infoToAddPdf.save()
+    form_data = {}
+    applicantInfo = json.loads(sys.argv[1])
+    populateFormData(applicantInfo)
 
-# # ----------------- PDF GENERATION ------------------
-# move to the beginning of the StringIO buffer
-packet.seek(0)
-new_pdf = PdfFileReader(packet)
+    dirname = os.path.dirname(__file__)
+    input_pdf_path = dirname + "/form.pdf"
+    output_pdf_path = dirname + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
+    fill_pdf(input_pdf_path, output_pdf_path, form_data)
 
-# read your existing PDF
-template = PdfFileReader(open("C:/Users/kishe/Desktop/NUSexchange/backend/routes/pdf/original-proposed-module.pdf", "rb"))
-output = PdfFileWriter()
-
-# add the "watermark" (which is the new pdf) on the existing page
-page = template.getPage(0) # PageObject
-page.mergePage(new_pdf.getPage(0))
-output.addPage(page)
-
-# finally, write "output" to a real file
-# dest = "/Users/kormi/OneDrive/Desktop/NUS/kms-NUSexchange/client/src/components/pdfgenerator/" + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
-dest = "C:/Users/kishe/Desktop/NUSexchange/backend/routes/pdf/" + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
-
-outputStream = open(dest, "wb")
-output.write(outputStream)
-
-outputStream.close()
+    dest = dirname + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
