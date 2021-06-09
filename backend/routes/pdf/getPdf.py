@@ -92,3 +92,4 @@ if __name__ == '__main__':
     fill_pdf(input_pdf_path, output_pdf_path, form_data)
 
     dest = dirname + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
+    
