@@ -29,7 +29,7 @@ def updatePUCodeIntoPdf(input, i):
     formEntry = 'Module Code' + str(i)
     form_data[formEntry] = input
 
-def updatePUNameIntoPdf(input):
+def updatePUNameIntoPdf(input, i):
     global form_data
     formEntry = 'Title of Module' + str(i)
     form_data[formEntry] = input
@@ -39,11 +39,11 @@ def updatePUCreditIntoPdf(input, i):
     formEntry = 'Credits' + str(i)
     form_data[formEntry] = input
 
-def parsePartnerModule(partnerModules):
+def parsePartnerModule(partnerModules, i):
     firstPartnerModule = partnerModules[0]
-    updatePUCodeIntoPdf(firstPartnerModule['partnerModuleCode'])
-    updatePUCreditIntoPdf(firstPartnerModule['partnerModuleCredit'])
-    updatePUNameIntoPdf(firstPartnerModule['partnerModuleTitle'])
+    updatePUCodeIntoPdf(firstPartnerModule['partnerModuleCode'], i)
+    updatePUCreditIntoPdf(firstPartnerModule['partnerModuleCredit'], i)
+    updatePUNameIntoPdf(firstPartnerModule['partnerModuleTitle'], i)
 
 def parseMappableModules(mappableModules):
     for i, mappableModule in enumerate(mappableModules):
