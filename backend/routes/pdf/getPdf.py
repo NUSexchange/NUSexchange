@@ -41,9 +41,10 @@ def updatePUCreditIntoPdf(input, i):
 
 def parsePartnerModule(partnerModules, i):
     firstPartnerModule = partnerModules[0]
-    updatePUCodeIntoPdf(firstPartnerModule['partnerModuleCode'], i)
-    updatePUCreditIntoPdf(firstPartnerModule['partnerModuleCredit'], i)
-    updatePUNameIntoPdf(firstPartnerModule['partnerModuleTitle'], i)
+    if firstPartnerModule:
+        updatePUCodeIntoPdf(firstPartnerModule['partnerModuleCode'], i)
+        updatePUCreditIntoPdf(firstPartnerModule['partnerModuleCredit'], i)
+        updatePUNameIntoPdf(firstPartnerModule['partnerModuleTitle'], i)
 
 def parseMappableModules(mappableModules):
     for i, mappableModule in enumerate(mappableModules):
@@ -78,18 +79,24 @@ def fill_pdf(input_pdf_path, output_pdf_path, data_dict):
     template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
     pdfrw.PdfWriter().write(output_pdf_path, template_pdf)
 
-if __name__ == '__main__':
-    # Get pdf form fields
-    # template_pdf = pdfrw.PdfReader(input_pdf_path)
+# Method for debugging to obtain all form fields
+def getFormFields():
+    template_pdf = pdfrw.PdfReader(os.path.dirname(__file__) + "/form.pdf")
+    for page in template_pdf.pages:
+        annotations = page[ANNOT_KEY]
+        for annotation in annotations:
+            if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
+                if annotation[ANNOT_FIELD_KEY]:
+                    key = annotation[ANNOT_FIELD_KEY][1:-1]
+                    print(key)
 
+if __name__ == '__main__':
     form_data = {}
     applicantInfo = json.loads(sys.argv[1])
+    # Test data: {"uni":{"university":"University of Toronto","location":"Canada","nusModuleInfo":[{"nusModuleCode":"CS2103","nusModuleTitle":"Software Engineering","nusModuleCredit":"0.50","partnerModules":[{},{},{},{},{},{},{},{}]},{"nusModuleCode":"CS2104","nusModuleTitle":"Software Engineering","nusModuleCredit":"0.50","partnerModules":[{},{},{},{},{},{},{},{}]},{"nusModuleCode":"CS2105","nusModuleTitle":"Software Engineering","nusModuleCredit":"0.50","partnerModules":[{},{},{},{},{},{},{},{}]}],"id":"ef808bcc425e272b51997af70e1de0573442ee1f"},"name":"Roger Lim","primaryMajor":"Computer science","studentId":"A0199776Y"}
     populateFormData(applicantInfo)
 
     dirname = os.path.dirname(__file__)
     input_pdf_path = dirname + "/form.pdf"
-    output_pdf_path = dirname + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
+    output_pdf_path = dirname + "/" + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
     fill_pdf(input_pdf_path, output_pdf_path, form_data)
-
-    dest = dirname + applicantInfo["name"].strip() + " " + applicantInfo["uni"]["university"].strip() + ".pdf"
-    
