@@ -61,8 +61,8 @@ def updatePersonalInfo(name, matricNumber, major, partnerUni):
     form_data['Partner University'] = partnerUni
 
 def populateFormData(applicantInfo):
-    updatePersonalInfo(applicantInfo["name"], applicantInfo["primaryMajor"]
-    , applicantInfo["studentId"], applicantInfo["uni"]['university'])
+    updatePersonalInfo(applicantInfo["name"], applicantInfo["studentId"],
+    applicantInfo["primaryMajor"], applicantInfo["uni"]['university'])
     parseMappableModules(applicantInfo["uni"]['nusModuleInfo'])
 
 def fill_pdf(input_pdf_path, output_pdf_path, data_dict):
