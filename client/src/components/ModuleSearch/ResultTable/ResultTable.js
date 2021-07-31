@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -15,6 +15,18 @@ import {useDispatch} from "react-redux";
 import {addUniversity} from "../../../actions";
 import {useSelector} from "react-redux";
 
+
+// Material-UI styles
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+  container: {
+    maxHeight: 440,
+  },
+});
+
+// Column definition for results table
 const columns = [
   { id: 'university', label: 'University', minWidth: 170 },
   { id: 'location', label: 'Location', minWidth: 100 },
@@ -32,20 +44,48 @@ const columns = [
   },
 ];
 
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-  },
-  container: {
-    maxHeight: 440,
-  },
-});
-
 export default function StickyHeadTable() {
 
+  function processResults(universityResults) {
+    const processedUniversityResults = [];
+
+    for (let university of universityResults) {
+      const matchingModulesSet = new Set();
+      for (let module of university["Modules"]) {
+        matchingModulesSet.add(module["Module"]);
+      }
+
+      const universityWithUniqueModule = {
+        "Country" : university["Country"],
+        "Modules" : university["Modules"],
+        "Total Mappable" : university["Total Mappable"],
+        "University" : university["University"],
+        "Unique Mappable" : Array.from(matchingModulesSet)
+      }
+
+      processedUniversityResults.push(universityWithUniqueModule);
+
+    }
+
+    return processedUniversityResults;
+  }
+
+
+  // Redux state
+  const universityResults = useSelector(store => store.universityResults);
+
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [matchingUniversities, setMatchingUniversities] = useState([]);
+
+  useEffect(() => {
+    console.log("University Results");
+    console.log(processResults(universityResults));
+    setMatchingUniversities(processResults(universityResults)
+                            .sort((o1, o2) => o2["Total Mappable"] - o1["Total Mappable"])
+                            .map(university => createData(university)));
+  }, [universityResults]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -60,7 +100,7 @@ export default function StickyHeadTable() {
     <Popover id="popover-basic">
       <Popover.Title as="h3">Mappable Modules</Popover.Title>
       <Popover.Content>
-          {nusModules.map((nusModule, index)=> <li key = {index}>{nusModule.nusModuleCode}</li>)}
+          {nusModules.map((nusModule, index)=> <li key = {index}>{nusModule}</li>)}
       </Popover.Content>
     </Popover>
   );
@@ -75,15 +115,15 @@ export default function StickyHeadTable() {
   const dispatch = useDispatch();
 
   function createData(uni) {
-    let university = uni.university;
-    let location = uni.location;
-    let moduleNumber = <div> {button(uni.nusModuleInfo)} </div>;
+    let university = uni["University"];
+    let location = uni["Country"];
+    let moduleNumber = <div> {button(uni["Unique Mappable"])} </div>;
     let actionButton = <Button variant = "light" type="button" onClick = {() => { dispatch(addUniversity(uni));}}>Add +</Button>
   
     return {university, location, moduleNumber, actionButton};
   }
 
-  const rows = useSelector(store => store.universityResults).map(uni => createData(uni));
+  // const rows = useSelector(store => store.universityResults).map(uni => createData(uni));
 
   return (
     <Paper className={classes.root}>
@@ -103,7 +143,7 @@ export default function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+            {matchingUniversities.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {
@@ -123,7 +163,7 @@ export default function StickyHeadTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={matchingUniversities.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

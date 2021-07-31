@@ -12,7 +12,7 @@ const MainView = (props) => {
             <Navbar expand="lg" bg="dark" variant="dark">
                 <Navbar.Brand>
                     <Link to ="/" style={{ textDecoration: 'none', color: "white", fontSize : 28}}>
-                        NUSExchange
+                        ExchangeNUS
                     </Link>
                 </Navbar.Brand>
             </Navbar>

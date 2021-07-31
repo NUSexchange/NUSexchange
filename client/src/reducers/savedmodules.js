@@ -5,13 +5,13 @@ const initialState = {
 
 const addModule = (state, module) => {
     const newSelectedModules = [...state.selectedModules, module];
-    const newModuleSet = state.moduleSet.add(module.title);
+    const newModuleSet = state.moduleSet.add(module.nus_module_title);
     return {selectedModules: newSelectedModules, moduleSet: newModuleSet};
 }
 
 const removeModule = (state, module) => {
-    const newSelectedModules = [...state.selectedModules.filter(mod => mod.title !== module.title)];
-    state.moduleSet.delete(module.title);
+    const newSelectedModules = [...state.selectedModules.filter(mod => mod.nus_module_title !== module.nus_module_title)];
+    state.moduleSet.delete(module.nus_module_title);
     const newModuleSet = state.moduleSet;
     return {selectedModules: newSelectedModules, moduleSet: newModuleSet};
 }

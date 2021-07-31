@@ -49,7 +49,7 @@ const OptionsBar = () => {
                 <option>USA</option>
             </Form.Control>
             <hr/>            
-            <h6>Additional Requirements</h6>
+            {/* <h6>Additional Requirements</h6>
             <Form>
                 <div key={`default-checkbox-1`} className="mb-3">
                     <Form.Check 
@@ -67,7 +67,7 @@ const OptionsBar = () => {
                         onChange = {() => dispatch(toggleOversubscribedUnis())}
                     />
                 </div>
-            </Form>
+            </Form> */}
         </Container>
     )
 }
