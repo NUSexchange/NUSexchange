@@ -123,8 +123,6 @@ export default function StickyHeadTable() {
     return {university, location, moduleNumber, actionButton};
   }
 
-  // const rows = useSelector(store => store.universityResults).map(uni => createData(uni));
-
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>

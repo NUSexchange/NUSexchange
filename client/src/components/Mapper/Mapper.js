@@ -80,7 +80,7 @@ const Mapper = () => {
             <Row>
                 <Col lg = {5}>
                     <form noValidate autoComplete="off">
-                        <SearchBarMap setNUSmodule = {updateModuleSelection}/>
+                        {/* <SearchBarMap setNUSmodule = {updateModuleSelection}/> */}
                         <hr></hr>
                         <TextField
                         id="outlined-multiline-static"

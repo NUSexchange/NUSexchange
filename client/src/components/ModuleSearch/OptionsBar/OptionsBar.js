@@ -1,12 +1,37 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./OptionsBar.module.css";
 import Form from "react-bootstrap/Form";
+import axios from "axios";
 import Container from "react-bootstrap/Container";
 import {useDispatch} from "react-redux";
 import {filterCountry, toggleLanguageRequirements, toggleOversubscribedUnis} from "../../../actions";
 
 const OptionsBar = () => {
     const dispatch = useDispatch();
+
+    const [countryList, setCountryList] = useState([<option>All countries</option>]);
+
+   /**
+   * Fetches a list of overseas countries that have partner universities with NUS.
+   */
+    function fetchOverseasUniversityCountries() {
+        axios.get("/api/countryOptions")
+          .then((response) => {
+            console.log(response);
+            const fetchedCountries = response.data.map((country) => <option>{country.partner_country}</option>);
+            setCountryList([...countryList, ...fetchedCountries]);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    
+      /**
+       * On component mount, fetch the list of overseas Universities and countries.
+       */
+      useEffect(() => {
+        fetchOverseasUniversityCountries();
+      }, []);
 
     return (
         <Container fluid style = {{marginTop : "20px"}}>
@@ -15,59 +40,9 @@ const OptionsBar = () => {
             </div>
             <h6>Select Country</h6>
             <Form.Control as="select" onChange = {(e) => dispatch(filterCountry(e.target.value))}>
-                <option>All countries</option>
-                <option>Australia</option>
-                <option>Austria</option>
-                <option>Belgium</option>
-                <option>Canada</option>
-                <option>China</option>
-                <option>Denmark</option>
-                <option>England</option>
-                <option>Estonia</option>
-                <option>Finland</option>
-                <option>Germany</option>
-                <option>Hong Kong</option>
-                <option>Hungary</option>
-                <option>Ireland</option>
-                <option>Israel</option>
-                <option>Italy</option>
-                <option>Japan</option>
-                <option>Mexico</option>
-                <option>Netherlands</option>
-                <option>New Zealand</option>
-                <option>Norway</option>
-                <option>Poland</option>
-                <option>Scotland</option>
-                <option>Singapore</option>
-                <option>South Korea</option>
-                <option>Spain</option>
-                <option>Sweden</option>
-                <option>Switzerland</option>
-                <option>Taiwan</option>
-                <option>Thailand</option>
-                <option>Turkey</option>
-                <option>USA</option>
+                {countryList}
             </Form.Control>
             <hr/>            
-            {/* <h6>Additional Requirements</h6>
-            <Form>
-                <div key={`default-checkbox-1`} className="mb-3">
-                    <Form.Check 
-                        type={"checkbox"}
-                        id={`checkbox-1`}
-                        label={`No language requirements`}
-                        onChange = {() => dispatch(toggleLanguageRequirements())}
-                    />
-                </div>
-                <div key={`default-checkbox-2`} className="mb-3">
-                    <Form.Check 
-                        type={"checkbox"}
-                        id={`checkbox-2`}
-                        label={`Exclude previously oversubscribed universities`}
-                        onChange = {() => dispatch(toggleOversubscribedUnis())}
-                    />
-                </div>
-            </Form> */}
         </Container>
     )
 }

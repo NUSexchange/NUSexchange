@@ -1,44 +1,14 @@
 //Once we have a backend to produce data then set both to be empty
 const initialState = {
-    updatedResults : [
-        {NUSmodule: "India", OverseasModule :"IN"},
-        {NUSmodule: "China", OverseasModule :"CN"},
-        {NUSmodule: "Italy", OverseasModule :"IT"},
-        {NUSmodule: "United States", OverseasModule :"US"},
-        {NUSmodule: "Canada", OverseasModule :"CND"},
-        {NUSmodule: "Australia", OverseasModule :"AU"},
-        {NUSmodule: "Germany", OverseasModule :"DE"},
-        {NUSmodule: "Ireland", OverseasModule :"IE"},
-        {NUSmodule: "Mexico", OverseasModule :"MX"},
-        {NUSmodule: "Japan", OverseasModule :"JP"},
-        {NUSmodule: "United Kingdom", OverseasModule :"GB"},
-        {NUSmodule: "Russia", OverseasModule :"RU"},
-        {NUSmodule: "Nigeria", OverseasModule :"NG"},
-        {NUSmodule: "Brazil", OverseasModule :"BR"}
-    ],
-    currentShownResults : [
-        {NUSmodule: "India", OverseasModule :"IN"},
-        {NUSmodule: "China", OverseasModule :"CN"},
-        {NUSmodule: "Italy", OverseasModule :"IT"},
-        {NUSmodule: "United States", OverseasModule :"US"},
-        {NUSmodule: "Canada", OverseasModule :"CND"},
-        {NUSmodule: "Australia", OverseasModule :"AU"},
-        {NUSmodule: "Germany", OverseasModule :"DE"},
-        {NUSmodule: "Ireland", OverseasModule :"IE"},
-        {NUSmodule: "Mexico", OverseasModule :"MX"},
-        {NUSmodule: "Japan", OverseasModule :"JP"},
-        {NUSmodule: "United Kingdom", OverseasModule :"GB"},
-        {NUSmodule: "Russia", OverseasModule :"RU"},
-        {NUSmodule: "Nigeria", OverseasModule :"NG"},
-        {NUSmodule: "Brazil", OverseasModule :"BR"}
-    ]
+    updatedResults : [],
+    currentShownResults : []
 }
 
 function filterResults(state, keyword) {
 
     let filteredView = [];
     if (state.updatedResults.length > 0) {
-        filteredView = state.updatedResults.filter(module => module.NUSmodule.toLowerCase().includes(keyword.toLowerCase()));
+        filteredView = state.updatedResults.filter(module => module["NUS Module"].toLowerCase().includes(keyword.toLowerCase()) || module["NUS Title"].toLowerCase().includes(keyword.toLowerCase()));
     } else {
         filteredView = [...state.updatedResults]
     }
