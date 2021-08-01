@@ -19,12 +19,10 @@ import {changeStudentID} from "../../actions";
 const SavedUniversities = () => {
 
     const currUnis = useSelector(store => store.myExchange.universities);
-    const savedDetails = useSelector(store => store.pdfDetails);
     const dispatch = useDispatch();
 
-
     const hasSavedUnis = <div className = {styles.grid}>
-                            {currUnis.map((uni, index) => <UniversityCard key = {index} university = {uni.university} location = {uni.location} nusModuleInfo = {uni.nusModuleInfo} id = {uni.key}/>)}
+                            {currUnis.map((uni, index) => <UniversityCard key = {index} university = {uni} location = {uni["Country"]} nusModuleInfo = {uni["Unique Mappable"]} id = {uni.key}/>)}
                         </div>;
 
     const noSavedUnis = <Jumbotron style = {{width : "100%"}}>
@@ -41,28 +39,7 @@ const SavedUniversities = () => {
 
     return (
         <Container fluid style = {{marginTop: "30px"}}>
-            <Form>
-                <Row>
-                    <Col sm = {12} lg = {4}>
-                        <Form.Group as={Col} controlId="formName" onChange = {(e) => dispatch(changeName(e.target.value))}>
-                            <Form.Label>Full Name</Form.Label>
-                            <Form.Control type="text" defaultValue = {savedDetails.name} placeholder = "Name" />
-                        </Form.Group>
-                    </Col>
-                    <Col sm = {12} lg = {4}>
-                        <Form.Group as={Col} controlId="formPrimaryMajor" onChange = {(e) => dispatch(changePrimaryMajor(e.target.value))}>
-                            <Form.Label>Primary Major</Form.Label>
-                            <Form.Control type="text" defaultValue = {savedDetails.primaryMajor} placeholder = "Primary Major" />
-                        </Form.Group>
-                    </Col>
-                    <Col sm = {12} lg = {4}>
-                        <Form.Group as={Col} controlId="formStudentID"onChange = {(e) => dispatch(changeStudentID(e.target.value))}>
-                            <Form.Label>Student Number</Form.Label>
-                            <Form.Control type="text" defaultValue = {savedDetails.studentId} placeholder = "Student ID"/>
-                        </Form.Group>
-                    </Col>
-                </Row>
-            </Form>
+            <h3>Saved University Mappings</h3>
             <hr />
                 <CardDeck>
                     {currUnis.length === 0 ? noSavedUnis : hasSavedUnis}

@@ -8,23 +8,70 @@ import Button from "react-bootstrap/Button";
 import {MdDelete} from "react-icons/md";
 import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
+import {addUniversity} from "../../../actions";
 import {removeModuleUniversity} from "../../../actions";
+import axios from "axios";
 
 
-const SavedModules = () => {
+const SavedModules = (props) => {
 
     let currMods = useSelector(store => store.savedModules.selectedModulesUniversities);
     let dispatch = useDispatch();
 
+    function processResults(universityResults) {
+        const processedUniversityResults = [];
+    
+        for (let university of universityResults) {
+          console.log(university["Modules"]);
+          const matchingModulesSet = new Set();
+          for (let module of university["Modules"]) {
+            matchingModulesSet.add(module["Module"]);
+          }
+    
+          const universityWithUniqueModule = {
+            "Country" : university["Country"],
+            "Modules" : university["Modules"],
+            "Total Mappable" : university["Total Mappable"],
+            "University" : university["University"],
+            "Unique Mappable" : Array.from(matchingModulesSet)
+          }
+    
+          processedUniversityResults.push(universityWithUniqueModule);
+    
+        }
+    
+        return processedUniversityResults;
+    }
 
-    //TODO: Create function that fetches the uni-module pairing and adds it to my Universities page
+    function fetchModulePairings() {
+        let requestObject = {
+            "information" : {
+                "modules" : [...currMods.map((mods, index) => mods["NUS Module"])],
+                "university" : props.university.partner_university
+            }
+        }
+        
+        axios.post("/api/single-uni-matched", requestObject)
+        .then((response) => {
+            let preprocessedData = [];
+            for (let key in response.data) {
+                preprocessedData.push(response.data[key]);
+            }
+            dispatch(addUniversity(processResults(preprocessedData)[0]));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+    }
+    
 
     return (
          <Col lg = {12} sm = {12} style = {{display : "flex"}}>
             <Container fluid>
                     <Row>
                     <h3>Selected Modules</h3>
-                    {currMods.length > 0 ? <Button variant="contained" style = {{marginLeft : "20px"}}>Save Selection</Button> : null}
+                    {currMods.length > 0 ? <Button variant="contained" style = {{marginLeft : "20px"}} onClick = {() => fetchModulePairings()}>Save Selection</Button> : null}
                     </Row>
                     <Row style = {{marginTop : "20px", marginBottom: "20px"}}>
                             <div className = {styles.grid}>

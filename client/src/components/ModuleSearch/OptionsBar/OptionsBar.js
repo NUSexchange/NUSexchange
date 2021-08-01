@@ -30,6 +30,7 @@ const OptionsBar = () => {
        * On component mount, fetch the list of overseas Universities and countries.
        */
       useEffect(() => {
+        dispatch(filterCountry("All countries"))
         fetchOverseasUniversityCountries();
       }, []);
 

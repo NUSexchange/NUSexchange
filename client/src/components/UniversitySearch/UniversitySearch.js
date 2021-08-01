@@ -15,6 +15,8 @@ import axios from "axios";
 const UniversitySearch = () => {
 
     const dispatch = useDispatch();
+
+    //TODO Should add this to REDUX so we can save the state
     const [selectedUniversity, setSelectedUniversity] = useState("");
 
     function fetchModulesOfUniversity() {
@@ -64,6 +66,8 @@ const UniversitySearch = () => {
                     ? null 
                     : <React.Fragment>
                         <Typography>
+                            <h6>{selectedUniversity.partner_university}</h6>
+                            <h6>Location : {selectedUniversity.partner_country}</h6>
                             <Link rel="noopener noreferrer" href={selectedUniversity.partner_information} target="_blank">
                                 {selectedUniversity.partner_university} - PDF
                             </Link>
@@ -80,7 +84,7 @@ const UniversitySearch = () => {
             <hr></hr>
             <Row style = {{display : "flex"}}>
                 <ResultTable/>
-                <SavedModules/>
+                <SavedModules university = {selectedUniversity} />
             </Row>
         </Container>
     )

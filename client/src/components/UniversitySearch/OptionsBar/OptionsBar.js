@@ -61,17 +61,7 @@ export default function OptionsBar(props) {
 
   return (
     <Row>
-      <Col lg = {6} sm = {12} style = {{display : "flex", justifyContent: "center", marginTop : "30px"}}>
-        <Autocomplete
-          id="universityList"
-          options = {overseasUniversityDisplay}
-          getOptionLabel={(options) => options.partner_university}
-          style={{ width: "100%" }}
-          onChange = {(event, value) => value === null ? props.setSelectedUniversity("") : props.setSelectedUniversity(value)}
-          renderInput={(params) => <TextField {...params} label="Select University" variant="outlined" />}
-        /> 
-      </Col>
-      <Col lg = {6} sm = {12} style = {{display : "flex", justifyContent: "center", marginTop : "30px"}}>
+    <Col lg = {12} sm = {12} style = {{display : "flex", justifyContent: "center", marginTop : "30px"}}>
       <Autocomplete
           id="facultyList"
           options = {overseasUniversityCountry}
@@ -79,6 +69,16 @@ export default function OptionsBar(props) {
           style={{ width: "100%" }}
           onChange = {(event, value) => value === null ? setFilterByCountry("All") : setFilterByCountry(value.partner_country) }
           renderInput={(params) => <TextField {...params} label="Filter University by Country" variant="outlined" />}
+        /> 
+      </Col>
+      <Col lg = {12} sm = {12} style = {{display : "flex", justifyContent: "center", marginTop : "30px"}}>
+        <Autocomplete
+          id="universityList"
+          options = {overseasUniversityDisplay}
+          getOptionLabel={(options) => options.partner_university}
+          style={{ width: "100%" }}
+          onChange = {(event, value) => value === null ? props.setSelectedUniversity("") : props.setSelectedUniversity(value)}
+          renderInput={(params) => <TextField {...params} label="Select University" variant="outlined" />}
         /> 
       </Col>
     </Row>

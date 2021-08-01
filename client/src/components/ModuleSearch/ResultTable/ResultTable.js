@@ -115,6 +115,7 @@ export default function StickyHeadTable() {
   const dispatch = useDispatch();
 
   function createData(uni) {
+    console.log(uni);
     let university = uni["University"];
     let location = uni["Country"];
     let moduleNumber = <div> {button(uni["Unique Mappable"])} </div>;
