@@ -81,7 +81,7 @@ export default function SearchBar() {
       getOptionDisabled={(options) => set.has(options.nus_module_title)}
       getOptionLabel={(options) => options.nus_module_code + " " + options.nus_module_title}
       style={{ width: "100%" }}
-      onChange= {(e, v) => v != null ? dispatch(addModule(v)) : null }
+      onChange= {(e, v) => v != null ?  dispatch(addModule(v)) : null }
       renderInput={(params) => <TextField {...params} label="Add Module" variant="outlined" />}
     />
   );

@@ -61,18 +61,29 @@ const Mapper = () => {
         setCurrView(errorResult);
     }
 
+    function fetchMatchProbability(nusModule, otherModule) {
+        let postObject = {
+            "nusModule": nusModule, 
+            "otherModule": otherModule
+        }
+
+        console.log(postObject);
+        
+        axios.post("/api/nlp", postObject)
+        .then((response) => {
+            let roundedData = Math.round(response.data[0] * 100) / 100;
+            console.log(response.data[0]);
+            console.log(roundedData);
+            updateViewSuccess(roundedData);
+        })
+        .catch((error) => {
+            updateViewError();
+        });
+    }
+
     const calculateProbability = (nusModule, otherModule) => {
         setCurrView(Loading);
-        setTimeout(3000);
-        axios.post("http://localhost:5000/getnlp/fetch", {"nusModule": nusModule, "otherModule" : otherModule})
-            .then(function (response) {
-                let roundedData = Math.round(response.data[0] * 100) / 100;
-                console.log(response.data[0]);
-                console.log(roundedData);
-                updateViewSuccess(roundedData);
-            }).catch(function(error) {
-                updateViewError();
-            })
+        fetchMatchProbability(nusModule, otherModule);
     }
 
     return (
@@ -80,7 +91,7 @@ const Mapper = () => {
             <Row>
                 <Col lg = {5}>
                     <form noValidate autoComplete="off">
-                        {/* <SearchBarMap setNUSmodule = {updateModuleSelection}/> */}
+                        <SearchBarMap setNUSmodule = {updateModuleSelection}/>
                         <hr></hr>
                         <TextField
                         id="outlined-multiline-static"
