@@ -14,6 +14,8 @@ import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from "react-bootstrap/Button";
+import axios from "axios";
+import { saveAs } from 'file-saver';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -34,9 +36,9 @@ const FormModal = (props) => {
     const savedDetails = useSelector(store => store.pdfDetails);
     const dispatch = useDispatch();
 
-    const [choice, setChoice] = React.useState(1);
+    const [choice, setChoice] = React.useState("1");
     const [academicYear, setAcademicYear] = React.useState("AY2021/2022");
-    const [semester, setSemester] = React.useState(1);
+    const [semester, setSemester] = React.useState("NUS Semester 1");
     const [mappings, setMappings] = React.useState({});
     const [mappingRow, setMappingRow] = React.useState([]);
 
@@ -123,7 +125,7 @@ const FormModal = (props) => {
                 let moduleObject = {
                     "nusModuleCode": module["Module"],
                     "nusModuleTitle": module["Title"],
-                    "nusModuleCredit": module["NUS Credits"],
+                    "nusModuleCredit": module["NUS Credits"].toString(),
                     "partnerModule": {
                       "partnerModuleCode": module["Partner Modules"],
                       "partnerModuleCredit": module["Partner Credits"],
@@ -148,7 +150,34 @@ const FormModal = (props) => {
               "choice": choice          
         }
 
+        // const fileName = savedDetails.name.trim() + " " + props.university["University"] + ".pdf";
+
         console.log(pdfRequest);
+
+        axios.post("/api/PDF", pdfRequest, { responseType: 'arraybuffer', 
+      })
+        .then((response) => {
+            // console.log(response);
+            const file = new Blob([response.data], {
+                type: "application/pdf"
+              });
+            //   //Build a URL from the file
+            saveAs(file, 'exchangeForm.pdf');
+            
+            // Leaving this here just incase 
+            // const url = window.URL.createObjectURL(new Blob([response.data]
+            //     , {type: "application/pdf"}))
+            //   var link = document.createElement('a');
+            //   link.href = url;
+            //   link.setAttribute('download', "exchangeMapping.pdf");
+            //   document.body.appendChild(link);
+            //   link.click();
+            //   document.body.removeChild(link)
+
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     /**
@@ -220,8 +249,8 @@ const FormModal = (props) => {
                             onChange={(event) => setSemester(event.target.value)}
                             label="Semester"
                             >
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
+                                <MenuItem value={"NUS Semester 1"}>1</MenuItem>
+                                <MenuItem value={"NUS Semester 2"}>2</MenuItem>
                             </Select>
                         </FormControl>
                     </Col>
@@ -237,9 +266,9 @@ const FormModal = (props) => {
                             onChange={(event) => setChoice(event.target.value)}
                             label="Choice"
                             >
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
-                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={"1"}>1</MenuItem>
+                                <MenuItem value={"2"}>2</MenuItem>
+                                <MenuItem value={"3"}>3</MenuItem>
                             </Select>
                         </FormControl>
                     </Col>
