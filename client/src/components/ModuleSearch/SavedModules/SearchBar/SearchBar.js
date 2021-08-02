@@ -26,7 +26,6 @@ export default function SearchBar() {
   function fetchAllModules() {
     axios.get("/api/modulesOptions")
     .then((response) => {
-      console.log(response);
       setModuleList(response.data);
     })
     .catch((error) => {
@@ -42,7 +41,6 @@ export default function SearchBar() {
   function fetchMatchingUniversities(requestParameters) {
     axios.post("/api/university-matched", requestParameters)
     .then((response) => {
-      console.log(response);
       dispatch(changeUniversities(response.data));
     })
     .catch((error) => {

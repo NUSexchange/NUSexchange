@@ -14,6 +14,10 @@ import Button from "react-bootstrap/Button";
 import {useDispatch} from "react-redux";
 import {addUniversity} from "../../../actions";
 import {useSelector} from "react-redux";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import objectHash from "object-hash";
+import { AiOutlinePlus, AiOutlineCheck } from "react-icons/ai"
 
 
 // Material-UI styles
@@ -73,19 +77,43 @@ export default function StickyHeadTable() {
 
   // Redux state
   const universityResults = useSelector(store => store.universityResults);
+  const myExchange = useSelector(store => store.myExchange);
 
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [matchingUniversities, setMatchingUniversities] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [savedHashSet, setSavedHashSet] = React.useState([]);
+
+  const handleClick = (uni) => {
+    dispatch(addUniversity(uni));
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
-    console.log("University Results");
-    console.log(processResults(universityResults));
     setMatchingUniversities(processResults(universityResults)
                             .sort((o1, o2) => o2["Total Mappable"] - o1["Total Mappable"])
                             .map(university => createData(university)));
   }, [universityResults]);
+
+  useEffect(() => {
+    setSavedHashSet([...myExchange.savedHashes]);
+  }, [myExchange]);
+  
+  useEffect(() => {
+    setMatchingUniversities(processResults(universityResults)
+                            .sort((o1, o2) => o2["Total Mappable"] - o1["Total Mappable"])
+                            .map(university => createData(university)));
+  }, [savedHashSet])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -107,67 +135,77 @@ export default function StickyHeadTable() {
   
   const button = (modules) => (
       <OverlayTrigger trigger= {["hover", "focus"]} placement="right" overlay= {popover(modules)}>
-      <Button variant="light">{modules.length}</Button>
+        <Button variant="light">{modules.length}</Button>
       </OverlayTrigger>
   );
 
 
   const dispatch = useDispatch();
 
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
   function createData(uni) {
-    console.log(uni);
     let university = uni["University"];
     let location = uni["Country"];
     let moduleNumber = <div> {button(uni["Unique Mappable"])} </div>;
-    let actionButton = <Button variant = "light" type="button" onClick = {() => { dispatch(addUniversity(uni));}}>Add +</Button>
+    let actionButton = <Button variant = "light" type="button" onClick = {() => handleClick(uni)}> {savedHashSet.includes(objectHash(uni)) ? <AiOutlineCheck /> : <AiOutlinePlus />}</Button>
   
     return {university, location, moduleNumber, actionButton};
   }
 
   return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {matchingUniversities.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={matchingUniversities.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <React.Fragment>
+      <Paper className={classes.root}>
+        <TableContainer className={classes.container}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {matchingUniversities.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={matchingUniversities.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            Mapping Saved to myExchange!
+          </Alert>
+      </Snackbar>
+    </React.Fragment>
   );
 }

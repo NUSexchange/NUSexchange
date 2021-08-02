@@ -1,20 +1,17 @@
 import React from "react";
-import styles from "./SavedUniversities.module.css";
-import Container from "react-bootstrap/Container";
-import CardDeck from "react-bootstrap/CardDeck";
-import UniversityCard from "./UniversityCard/UniversityCard";
-import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
-import {useSelector} from "react-redux";
-import {FaSadCry} from "react-icons/fa";
-import {Link} from "react-router-dom";
-import Form from "react-bootstrap/Form";
+import CardDeck from "react-bootstrap/CardDeck";
 import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Jumbotron from "react-bootstrap/Jumbotron";
 import Row from "react-bootstrap/Row";
-import {useDispatch} from "react-redux";
-import {changeName} from "../../actions";
-import {changePrimaryMajor} from "../../actions";
-import {changeStudentID} from "../../actions";
+import { FaSadCry } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { changeName, changePrimaryMajor, changeStudentID } from "../../actions";
+import styles from "./SavedUniversities.module.css";
+import UniversityCard from "./UniversityCard/UniversityCard";
 
 const SavedUniversities = () => {
 
