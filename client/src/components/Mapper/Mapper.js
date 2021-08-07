@@ -14,6 +14,7 @@ import Jumbotron from "react-bootstrap/Jumbotron"
 import axios from 'axios';
 import styles from "./Mapper.module.css";
 import mingSoon from "../../images/MingSoon.png";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const noResult = <h1>Select an NUS module to compare with!<BiHappyBeaming /></h1>;
 
@@ -31,9 +32,7 @@ const greenBand = <div className = {styles.greenBand}>
 
 const errorResult = <h1>Oh no! Looks like something went wrong! <BiError /></h1>;
 
-const Loading = <div>
-                    <img className= {styles.rotate} src = {mingSoon} alt="logo"/>
-                </div>
+const Loading = <CircularProgress />
 
 
 const Mapper = () => {
@@ -61,18 +60,29 @@ const Mapper = () => {
         setCurrView(errorResult);
     }
 
+    function fetchMatchProbability(nusModule, otherModule) {
+        let postObject = {
+            "nusModule": nusModule, 
+            "otherModule": otherModule
+        }
+
+        console.log(postObject);
+        
+        axios.post("/api/nlp", postObject)
+        .then((response) => {
+            let roundedData = Math.round(response.data[0] * 100) / 100;
+            console.log(response.data[0]);
+            console.log(roundedData);
+            updateViewSuccess(roundedData);
+        })
+        .catch((error) => {
+            updateViewError();
+        });
+    }
+
     const calculateProbability = (nusModule, otherModule) => {
         setCurrView(Loading);
-        setTimeout(3000);
-        axios.post("http://localhost:5000/getnlp/fetch", {"nusModule": nusModule, "otherModule" : otherModule})
-            .then(function (response) {
-                let roundedData = Math.round(response.data[0] * 100) / 100;
-                console.log(response.data[0]);
-                console.log(roundedData);
-                updateViewSuccess(roundedData);
-            }).catch(function(error) {
-                updateViewError();
-            })
+        fetchMatchProbability(nusModule, otherModule);
     }
 
     return (

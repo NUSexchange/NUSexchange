@@ -33,6 +33,22 @@ export const removeModule = (module) => {
   }
 }
 
+//ACTION ADD MODULE FOR SEARCH BY UNIVERSITY
+export const addModuleUniversity = (module) => {
+  return {
+    type : "ADD_MODULE_UNIVERSITY",
+    payload : module
+  }
+}
+
+//ACTION ADD MODULE FOR SEARCH BY UNIVERSITY
+export const removeModuleUniversity = (module) => {
+  return {
+    type : "REMOVE_MODULE_UNIVERSITY",
+    payload : module
+  }
+}
+
 //ACTION FILTER COUNTRY
 export const filterCountry = (country) => {
   return {

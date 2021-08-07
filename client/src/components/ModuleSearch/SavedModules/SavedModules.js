@@ -25,7 +25,7 @@ const SavedModules = () => {
                 <div className = {styles.grid}>
                         {currMods.map((mods, index) => <Card body key = {index}>
                                                             <div className = {styles.modBlock}>
-                                                                {mods.title + " " + mods["NUS Module 1 Title"]}
+                                                                {mods.nus_module_code + " " + mods.nus_module_title}
                                                                 <Button variant = "light" onClick = {() => dispatch(removeModule(mods))}><MdDelete/></Button> 
                                                             </div>
                                                         </Card>)}

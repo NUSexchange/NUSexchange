@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.6.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
+    "file-saver": "^2.0.5",
     "object-hash": "^2.1.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
@@ -23,6 +24,7 @@
     "redux": "^4.0.5",
     "web-vitals": "^0.2.4"
   },
+  "proxy": "http://127.0.0.1:8000/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

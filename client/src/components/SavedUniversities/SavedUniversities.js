@@ -1,30 +1,25 @@
 import React from "react";
-import styles from "./SavedUniversities.module.css";
-import Container from "react-bootstrap/Container";
-import CardDeck from "react-bootstrap/CardDeck";
-import UniversityCard from "./UniversityCard/UniversityCard";
-import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
-import {useSelector} from "react-redux";
-import {FaSadCry} from "react-icons/fa";
-import {Link} from "react-router-dom";
-import Form from "react-bootstrap/Form";
+import CardDeck from "react-bootstrap/CardDeck";
 import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Jumbotron from "react-bootstrap/Jumbotron";
 import Row from "react-bootstrap/Row";
-import {useDispatch} from "react-redux";
-import {changeName} from "../../actions";
-import {changePrimaryMajor} from "../../actions";
-import {changeStudentID} from "../../actions";
+import { FaSadCry } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { changeName, changePrimaryMajor, changeStudentID } from "../../actions";
+import styles from "./SavedUniversities.module.css";
+import UniversityCard from "./UniversityCard/UniversityCard";
 
 const SavedUniversities = () => {
 
     const currUnis = useSelector(store => store.myExchange.universities);
-    const savedDetails = useSelector(store => store.pdfDetails);
     const dispatch = useDispatch();
 
-
     const hasSavedUnis = <div className = {styles.grid}>
-                            {currUnis.map((uni, index) => <UniversityCard key = {index} university = {uni.university} location = {uni.location} nusModuleInfo = {uni.nusModuleInfo} id = {uni.key}/>)}
+                            {currUnis.map((uni, index) => <UniversityCard key = {index} university = {uni} location = {uni["Country"]} nusModuleInfo = {uni["Unique Mappable"]} id = {uni.key}/>)}
                         </div>;
 
     const noSavedUnis = <Jumbotron style = {{width : "100%"}}>
@@ -41,28 +36,7 @@ const SavedUniversities = () => {
 
     return (
         <Container fluid style = {{marginTop: "30px"}}>
-            <Form>
-                <Row>
-                    <Col sm = {12} lg = {4}>
-                        <Form.Group as={Col} controlId="formName" onChange = {(e) => dispatch(changeName(e.target.value))}>
-                            <Form.Label>Full Name</Form.Label>
-                            <Form.Control type="text" defaultValue = {savedDetails.name} placeholder = "Name" />
-                        </Form.Group>
-                    </Col>
-                    <Col sm = {12} lg = {4}>
-                        <Form.Group as={Col} controlId="formPrimaryMajor" onChange = {(e) => dispatch(changePrimaryMajor(e.target.value))}>
-                            <Form.Label>Primary Major</Form.Label>
-                            <Form.Control type="text" defaultValue = {savedDetails.primaryMajor} placeholder = "Primary Major" />
-                        </Form.Group>
-                    </Col>
-                    <Col sm = {12} lg = {4}>
-                        <Form.Group as={Col} controlId="formStudentID"onChange = {(e) => dispatch(changeStudentID(e.target.value))}>
-                            <Form.Label>Student Number</Form.Label>
-                            <Form.Control type="text" defaultValue = {savedDetails.studentId} placeholder = "Student ID"/>
-                        </Form.Group>
-                    </Col>
-                </Row>
-            </Form>
+            <h3>Saved University Mappings</h3>
             <hr />
                 <CardDeck>
                     {currUnis.length === 0 ? noSavedUnis : hasSavedUnis}
