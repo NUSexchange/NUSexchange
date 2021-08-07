@@ -154,7 +154,7 @@ const FormModal = (props) => {
 
         console.log(pdfRequest);
 
-        axios.post("/api/PDF", pdfRequest, { responseType: 'arraybuffer', 
+        axios.post("/api/PDF", pdfRequest, { responseType: 'blob', 
       })
         .then((response) => {
             // console.log(response);
@@ -163,13 +163,13 @@ const FormModal = (props) => {
               });
             //   //Build a URL from the file
             saveAs(file, 'exchangeForm.pdf');
-            
+
             // Leaving this here just incase 
             // const url = window.URL.createObjectURL(new Blob([response.data]
             //     , {type: "application/pdf"}))
             //   var link = document.createElement('a');
             //   link.href = url;
-            //   link.setAttribute('download', "exchangeMapping.pdf");
+            //   link.setAttribute('download', "exchangeMappingASDA.pdf");
             //   document.body.appendChild(link);
             //   link.click();
             //   document.body.removeChild(link)
