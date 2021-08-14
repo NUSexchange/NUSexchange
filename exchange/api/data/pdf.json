@@ -1,0 +1,23 @@
+{
+    "uni": {
+      "university": "Hong Kong University of Science & Technology",
+      "moduleInfo": [
+        {
+          "nusModuleCode": "CS2103",
+          "nusModuleTitle": "Software Engineering",
+          "nusModuleCredit": "4.00",
+          "partnerModule": {
+            "partnerModuleCode": "COMP3111",
+            "partnerModuleCredit": "4.00",
+            "partnerModuleTitle": "Software Engineering"
+          }
+        }
+      ]
+    },
+    "name": "Roger Lim",
+    "primaryMajor": "Computer Science",
+    "studentId": "A0199776Y",
+    "acadYear": "AY2021/2022",
+    "semester": "NUS Semester 1",
+    "choice": "1"
+  }  
